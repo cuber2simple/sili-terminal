@@ -8,15 +8,13 @@
 # │   Alt-g → lazygit                    │
 # │   Alt-q → 退出 session               │
 # └─────────────────────────────────────┘
-SESSION="hacker"
 
-# 如果旧 session 还在，先杀掉
-tmux has-session -t "$SESSION" 2>/dev/null && tmux kill-session -t "$SESSION" 2>/dev/null
+DIR="${1:-$(pwd)}"
+DIR="$(cd "$DIR" 2>/dev/null && pwd)"
+BASENAME="$(basename "$DIR")"
+RAND="$(head -c4 /dev/urandom | xxd -p)"
+SESSION="hacker-${BASENAME//[.:]/-}-${RAND}"
 
-cleanup() { tmux kill-session -t "$SESSION" 2>/dev/null; }
-trap cleanup EXIT HUP TERM
-
-# 全屏 Claude Code
-tmux new-session -d -s "$SESSION" -x "$(tput cols)" -y "$(tput lines)"
+tmux new-session -d -s "$SESSION" -c "$DIR" -x "$(tput cols)" -y "$(tput lines)"
 tmux send-keys -t "$SESSION" 'ccd' C-m
-tmux attach -t "$SESSION"
+exec tmux attach -t "$SESSION"
