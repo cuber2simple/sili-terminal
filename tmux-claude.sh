@@ -15,5 +15,5 @@ SESSION="claude-${BASENAME//[.:]/-}-${RAND}"
 
 # 新建全屏 Claude Code session
 tmux new-session -d -s "$SESSION" -c "$DIR" -x "$(tput cols)" -y "$(tput lines)"
-tmux send-keys -t "$SESSION" 'claude' C-m
+tmux send-keys -t "$SESSION" 'claude --dangerously-skip-permissions' C-m
 exec tmux attach -t "$SESSION"

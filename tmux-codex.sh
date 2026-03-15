@@ -16,5 +16,5 @@ RAND="$(head -c4 /dev/urandom | xxd -p)"
 SESSION="codex-${BASENAME//[.:]/-}-${RAND}"
 
 tmux new-session -d -s "$SESSION" -c "$DIR" -x "$(tput cols)" -y "$(tput lines)"
-tmux send-keys -t "$SESSION" 'codex' C-m
+tmux send-keys -t "$SESSION" 'codex --full-auto' C-m
 exec tmux attach -t "$SESSION"
